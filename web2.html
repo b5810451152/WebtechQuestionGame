@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link href="game.css" rel="stylesheet" type="text/css" />
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+      <center>
+    <div>
+      <div  class="Menu">
+        
+        <p id="10" class="menu1" >10 Question</p>
+        <p id="20" class="menu1">20 Question</p>
+        <h3 id="timeperques">Time</h3>
+        <img  class="menu2" style="width: 400px; height:260px;margin-top: -120px"/>
+        <p class="menu2" id = "ques">a</p>
+        <div class="box">
+          <div class="choiceleft">
+              <p class="menu2" id = "ch1">b</p>
+              <p class="menu2" id = "ch2">c</p>
+          </div>
+          <div class="choiceright">
+              <p class="menu2" id = "ch3">d</p>
+              <p class="menu2" id = "ch4">e</p>
+            </div>
+           
+      </div>
+      
+
+     
+    
+        <p id="time">time</p>
+
+        <p id="point" class="score" >Score</p>
+        <p id="timetotal" class="score">Time total</p>
+        
+
+
+      </div>
+
+    </div>
+
+    <div>
+      <div class="question">
+        
+
+      </div>
+
+    </div>
+  </center>
+
+
+    
+    
+    <script src="jquery-3.3.1.min.js" charset="utf-8">
+    </script>
+    <script>
+      var question=[];
+      var timequest;
+      var timetotal;
+      var count = 0;
+      var timeStart=0;
+      var score=0;
+      var ans = "";
+      var timeper =16;
+      var countrandom;
+      var timer = function(){
+        timeStart++;
+        $('#time').text(timeStart);
+        
+     
+      }
+      var timerpercont = function(){
+        timeper--;
+        $('#timeperques').text(timeper);
+        if(timeper==0){
+          prove();
+        }
+        
+        
+     
+      }
+
+      function next(){
+        countrandom=ran();
+        // let n = question.size();
+        while (numUseto.includes(countrandom) || countrandom >= 20)
+        {
+     
+            countrandom=ran();
+            console.log(countrandom+" COUNT RAN DOM");
+        }
+        
+        numUseto.push(countrandom);
+        timeper=16;
+        count++;
+        console.log("True :"+score);
+        $(".menu1").hide(500);
+        $(".menu2").show(500);
+        $('#ques').html(question[countrandom]["question"]);
+        $('#ch1').html(question[countrandom]['ch1']);
+        $('#ch2').html(question[countrandom]['ch2']);
+        $('#ch3').html(question[countrandom]['ch3']);
+        $('#ch4').html(question[countrandom]['ch4']);
+        $('img').attr('src',question[countrandom]['img']);
+        ans=question[countrandom]["ans"];
+        console.log(ans+"   ANS");
+
+        
+
+      }
+
+      function prove(x){
+        if(x==ans){
+          score++;
+          console.log(score+"SCORE");
+        }
+        console.log("COUNT : "+count);
+        if(count==limit){
+          console.log("THIS END :"+count);
+          $('.box').hide(100);
+          $('.menu2').hide(100);
+          $('#time').hide(100);
+          $('#timeperques').hide(100);
+          
+          clearInterval(timequest);
+          console.log(timequest+"QUEST")
+          clearInterval(timetotal);         
+          $('.score').show();
+
+          $('#point').html("Your Score : "+ score+" / "+limit) ;
+          $('#timetotal').html("Time :"+timeStart+" sec");
+
+        }
+        else{
+          console.log("BOOMOMOMOMO")
+          next();
+        }
+
+
+
+      }
+
+
+      var limit;
+      var numUseto=[];
+      timetotal=setInterval(timer, 1000);
+      $(document).ready(function(){
+        $.ajax({
+          url: 'data.json',
+          method: 'GET',
+          dataType: 'json',
+          success:function(response){
+            console.log(response);
+            question=response;
+            }
+        });
+      });
+      function ran(){
+        return Math.floor(Math.random(20)*100);
+
+      }
+      $('.menu2').hide();
+      $('.score').hide();
+      $("#timeperques").hide();
+ 
+      $('.menu1').click(function(){
+        
+        if ($('#10').html()==($(this).html())){
+          limit=10;
+                 
+        }  
+
+        else{
+          limit=20;
+        }
+        prove();
+        $('#timeperques').show(500);
+        timequest=setInterval(timerpercont, 1000);
+        console.log(limit);
+ 
+      })
+
+      $('.menu2').click(function(){
+        $('.menu2').hide(500);
+        $('.menu2').show(500);
+        prove($(this).html());
+      })
+   
+
+     
+    
+      
+      
+
+      
+      </script>
+      
+
+
+
+  </body>
+</html>
